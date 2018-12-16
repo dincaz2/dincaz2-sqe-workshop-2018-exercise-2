@@ -1,29 +1,33 @@
 import $ from 'jquery';
 import {parseCode} from './code-analyzer';
-import {parseAndView} from './parser';
+import {substituteWrapper} from './code-substitution';
+import {paintWrapper} from './code-painter';
 
 $(document).ready(function () {
     $('#codeSubmissionButton').click(() => {
         let codeToParse = $('#codePlaceholder').val();
         let parsedCode = parseCode(codeToParse);
-        $('#parsedCode').val(JSON.stringify(parsedCode, null, 2));
-        populateTable(parseAndView(parsedCode));
+
+        let substitutedCode = substituteWrapper(parsedCode);
+        let substitutedParseCode = parseCode(substitutedCode);
+        let colors = paintWrapper(substitutedParseCode, $('#parametersPlaceholder').val());
+
+        paintRows(substitutedCode, colors);
     });
 });
 
-function populateTable(rows){
-    let table = document.getElementById('parseTable');
-    if (table === null) {
-        table = document.createElement('table');
-        table.id = 'parseTable';
-    } else
-        table.innerHTML = '';
-    for (let row of rows) {
-        let newRow = table.insertRow();
-        for (let cell of row) {
-            let newCell = newRow.insertCell();
-            newCell.textContent = cell;
-        }
-    }
-    document.body.appendChild(table);
+function chooseColor(lineNum, colors) {
+    if (colors['r'].includes(lineNum))
+        return 'red';
+    if (colors['g'].includes(lineNum))
+        return 'green';
+    return 'white';
+}
+
+function paintRows(substitutedCode, colors){
+    let substitutedCodeArea = document.getElementById('substitutedCodeArea');
+    substitutedCodeArea.innerHTML = '';
+    substitutedCode.split('\n').forEach((lineCode, lineNum) => {
+        substitutedCodeArea.innerHTML += '<span style="white-space: pre; background-color: ' + chooseColor(lineNum + 1, colors) + ';">'+ lineCode + '</span><br>\n';
+    });
 }

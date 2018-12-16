@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <style>
         table {
             width: 100%;
@@ -28,7 +27,7 @@
         </td>
         <td>
             <div>
-                <label>Parsed code here</label>
+                <label>Substituted colored code here</label>
             </div>
         </td>
     </tr>
@@ -37,10 +36,12 @@
             <div class="textAreaWrapper">
                 <textarea id="codePlaceholder" title="Enter code here"></textarea>
             </div>
+            <div class="parameters">
+                <textarea id="parametersPlaceholder" title="Enter parameters here"></textarea>
+            </div>
         </td>
         <td>
-            <div class="textAreaWrapper">
-                <textarea id="parsedCode" title="Parse code"></textarea>
+            <div id="substitutedCodeArea">
             </div>
         </td>
     </tr>
