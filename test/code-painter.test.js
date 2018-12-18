@@ -94,15 +94,14 @@ describe('The substitution module', () => {
     it('is handling arrays 2', () => {
         let code =
             'function foo(x, y, z) {\n' +
-            '    y = [x,1];\n' +
-            '    if (y[0] < z) {\n' +
-            '        y = z;\n' +
+            '    if ([x,1][0] < z) {\n' +
+            '        x = z;\n' +
             '    }\n' +
-            '    return y;\n' +
+            '    return z;\n' +
             '}';
         let params = '1,2,3';
         let actual = paintWrapper(parseCode(code), params);
-        let expected = {'g' : [3], 'r' : []};
+        let expected = {'g' : [2], 'r' : []};
         assert.equal(JSON.stringify(actual), JSON.stringify(expected));
     });
 

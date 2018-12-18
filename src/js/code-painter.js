@@ -22,8 +22,7 @@ function block(exp, params, coloredLines) {
     exp.body.forEach(e => paint(e, params, coloredLines));
 }
 
-function assignmentExpression(exp, params) {
-    params[exp.left.name] = evalExp(exp.right, params);
+function assignmentExpression() {
 }
 
 function expressionStatement(exp, params, coloredLines) {

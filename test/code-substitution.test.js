@@ -139,6 +139,28 @@ describe('The substitution module', () => {
         assert.equal(actual,expected);
     });
 
+    it('is handling arrays 3', () => {
+        let code =
+            'function foo(x, y, z){\n' +
+            '    let a = [1,2,3];\n' +
+            '    a[0] = 5;\n' +
+            '    \n' +
+            '    if (a[0] < z) {\n' +
+            '        y = z;\n' +
+            '    }\n' +
+            '    return y;\n' +
+            '}\n';
+        let actual = substituteWrapper(parseCode(code));
+        let expected =
+            'function foo(x, y, z) {\n' +
+            '    if (5 < z) {\n' +
+            '        y = z;\n' +
+            '    }\n' +
+            '    return y;\n' +
+            '}';
+        assert.equal(actual,expected);
+    });
+
     it('is handling global variables', () => {
         let code =
             'let w = 1;\n' +
@@ -176,7 +198,7 @@ describe('The substitution module', () => {
         let expected =
             'function foo(x, y, z) {\n' +
             '    x = 2;\n' +
-            '    if (x < z) {\n' +
+            '    if (2 < z) {\n' +
             '        y = z;\n' +
             '    }\n' +
             '    return y;\n' +

@@ -32,10 +32,12 @@ function block(exp, env, notLocals, isGlobal) {
 
 function assignmentExpression(exp, env, notLocals) {
     let right = substituteAtomic(exp.right, env);
-    if (notLocals.includes(exp.left.name))
-        return false;
-    env[exp.left.name] = right;
-    return true;
+    let left = exp.left;
+    if (left.type === 'Identifier')
+        env[exp.left.name] = right;
+    else // array
+        env[left.object.name + '[' + left.property.raw + ']'] = right;
+    return !notLocals.includes(exp.left.name);
 }
 
 function expressionStatement(exp, env, notLocals, isGlobal) {
@@ -104,8 +106,11 @@ function arrayExpression(exp, env){
 }
 
 function memberExpression(exp, env) {
+    let memberString = exp.object.name + '[' + exp.property.raw + ']';
+    if (memberString in env)
+        return env[memberString];
     exp.object = substituteAtomic(exp.object, env);
-    exp.propery = substituteAtomic(exp.property, env);
+    exp.property = substituteAtomic(exp.property, env);
     return exp;
 }
 
